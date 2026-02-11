@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = '<label class="form-label" style="color:red;">Please fill all fields</label>';
     } else {
 
-        // Check user type
         $stmt = $database->prepare("SELECT usertype FROM webuser WHERE contact=?");
         $stmt->bind_param("s", $contact);
         $stmt->execute();
@@ -34,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $utype = $result->fetch_assoc()['usertype'];
 
-            // ================= PATIENT =================
             if ($utype === 'p') {
                 $stmt = $database->prepare(
                     "SELECT pcontact FROM patient WHERE pcontact=? AND ppassword=?"
@@ -51,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = '<label style="color:red;">Invalid contact or password</label>';
                 }
 
-            // ================= ADMIN =================
             } elseif ($utype === 'a') {
                 $stmt = $database->prepare(
                     "SELECT acontact, role FROM admin WHERE acontact=? AND apassword=?"
@@ -71,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = '<label style="color:red;">Invalid contact or password</label>';
                 }
 
-            // ================= DOCTOR =================
             } elseif ($utype === 'd') {
                 $stmt = $database->prepare(
                     "SELECT doccontact FROM doctor WHERE doccontact=? AND docpassword=?"
@@ -101,16 +97,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/login.css">
+
+    <style>
+        table{
+            width:100%;
+        }
+
+        .login-btn{
+            transition:0.3s ease;
+        }
+
+        .login-btn:hover{
+            background: linear-gradient(to right, #085fb1, #007acc);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .login-btn:active{
+            transform: scale(0.98);
+        }
+
+        td{
+            padding:8px 0;
+        }
+
+        label{
+            display:block;
+            text-align:left;
+            margin-bottom:5px;
+            font-weight:500;
+        }
+
+        .input-text{
+            width:100%;
+            box-sizing:border-box;
+        }
+    </style>
 </head>
 
 <body>
-<center>
+
 <div class="container">
 <form method="POST">
-<table style="width:100%;">
+
+<table>
 
 <tr>
     <td><p class="header-text">Welcome Back!</p></td>
@@ -145,16 +178,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </tr>
 
 <tr>
-    <td>
+    <td style="text-align:center;">
         <br>
         Don't have an account?
-        <a href="signup.php">Sign Up</a>
+        <a href="signup.php" class="hover-link1">Sign Up</a>
     </td>
 </tr>
 
 </table>
 </form>
 </div>
-</center>
+
 </body>
 </html>
